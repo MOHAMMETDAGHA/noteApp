@@ -21,8 +21,8 @@ import android.widget.CompoundButton
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
+import android.view.View
+import android.widget.AdapterView
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,6 +39,12 @@ class MainActivity : AppCompatActivity() {
         var currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEE"))
         today.text=currentDate
         val todo_inflator = LayoutInflater.from(applicationContext).inflate(R.layout.item,null)
+        // set item listner
+
+        list.onItemClickListener=AdapterView.OnItemClickListener{
+                _: AdapterView<*>, view1: View, i: Int, l: Long ->
+                Toast.makeText(applicationContext,"clichedd",Toast.LENGTH_SHORT).show()
+        }
         todo_inflator.listItem.setOnClickListener{
             wtf("55","ttt")
         }
