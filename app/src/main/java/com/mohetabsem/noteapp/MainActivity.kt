@@ -7,13 +7,22 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import android.os.Build
 import android.util.Log.wtf
+import android.view.LayoutInflater
 import androidx.annotation.RequiresApi
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.item.view.*
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
+
+import android.widget.CompoundButton
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +34,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mTodo= ArrayList()
+        var currentDay = LocalDateTime.now().format(DateTimeFormatter.ofPattern("d MMM hh:mm a"))
+        todayDate.text=currentDay
+        var currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEE"))
+        today.text=currentDate
+        val todo_inflator = LayoutInflater.from(applicationContext).inflate(R.layout.item,null)
+        todo_inflator.listItem.setOnClickListener{
+            wtf("55","ttt")
+        }
+        todo_inflator.doit.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                // this doesn't work
+                Toast.makeText(
+                    applicationContext,
+                    "isChecked - " ,
+                    Toast.LENGTH_SHORT
+                ).show()
+                wtf("55","ttt")
+            }
+            wtf("55","232323")
+
+        })
         //db
         val database = FirebaseDatabase.getInstance()
          myRef = database.getReference("nots")
@@ -43,11 +73,11 @@ class MainActivity : AppCompatActivity() {
             if (inputVal.isEmpty()){
                 Toast.makeText(applicationContext, "empty", Toast.LENGTH_SHORT).show()
             }else{
-                var addedTodo = Todo(id!!,inputVal,"$currentDateTime",false)
+
                 //arrayAdapter.add("${inputVal}")
                 //list.adapter=myAddapter(applicationContext, mTodo!!)
                 input.setText("")
-                myRef!!.child(id!!).setValue(addedTodo)
+                post2db(id!!,inputVal,"$currentDateTime",false)
 //                myRef.child("$currentDateTime").child("txt").setValue("${inputVal}")
 //                myRef.child("$currentDateTime").child("isDone").setValue(false)
                 wtf("@@","$currentDateTime")
@@ -77,5 +107,8 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
-
+    fun post2db(id:String,text:String,time:String,isDone:Boolean){
+        var addedTodo = Todo(id!!,text,"$time",false)
+        myRef!!.child(id!!).setValue(addedTodo)
+    }
 }
