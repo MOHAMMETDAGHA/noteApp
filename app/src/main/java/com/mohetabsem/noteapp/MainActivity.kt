@@ -33,34 +33,33 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mTodo= ArrayList()
+        mTodo = ArrayList()
         var currentDay = LocalDateTime.now().format(DateTimeFormatter.ofPattern("d MMM hh:mm a"))
-        todayDate.text=currentDay
+        todayDate.text = currentDay
         var currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEE"))
-        today.text=currentDate
-        val todo_inflator = LayoutInflater.from(applicationContext).inflate(R.layout.item,null)
+        today.text = currentDate
+        val todo_inflator = LayoutInflater.from(applicationContext).inflate(R.layout.item, null)
         // set item listner
+        list.setOnItemClickListener{parent, view, position, id ->
+            Toast.makeText(applicationContext, "emptys", Toast.LENGTH_SHORT).show()
 
-        list.onItemClickListener=AdapterView.OnItemClickListener{
-                _: AdapterView<*>, view1: View, i: Int, l: Long ->
-                Toast.makeText(applicationContext,"clichedd",Toast.LENGTH_SHORT).show()
         }
-        todo_inflator.listItem.setOnClickListener{
-            wtf("55","ttt")
-        }
-        todo_inflator.doit.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                // this doesn't work
-                Toast.makeText(
-                    applicationContext,
-                    "isChecked - " ,
-                    Toast.LENGTH_SHORT
-                ).show()
-                wtf("55","ttt")
-            }
-            wtf("55","232323")
-
-        })
+//        todo_inflator.listItem.setOnClickListener{
+//            wtf("55","ttt")
+//        }
+//        todo_inflator.doit.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+//            if (isChecked) {
+//                // this doesn't work
+//                Toast.makeText(
+//                    applicationContext,
+//                    "isChecked - " ,
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                wtf("55","ttt")
+//            }
+//            wtf("55","232323")
+//
+//        })
         //db
         val database = FirebaseDatabase.getInstance()
          myRef = database.getReference("nots")
