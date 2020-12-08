@@ -23,6 +23,9 @@ import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import com.yalantis.beamazingtoday.R2
+import com.yalantis.beamazingtoday.R2.id.view
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,27 +42,8 @@ class MainActivity : AppCompatActivity() {
         var currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEE"))
         today.text = currentDate
         val todo_inflator = LayoutInflater.from(applicationContext).inflate(R.layout.item, null)
-        // set item listner
-        list.setOnItemClickListener{parent, view, position, id ->
-            Toast.makeText(applicationContext, "emptys", Toast.LENGTH_SHORT).show()
 
-        }
-//        todo_inflator.listItem.setOnClickListener{
-//            wtf("55","ttt")
-//        }
-//        todo_inflator.doit.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-//            if (isChecked) {
-//                // this doesn't work
-//                Toast.makeText(
-//                    applicationContext,
-//                    "isChecked - " ,
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                wtf("55","ttt")
-//            }
-//            wtf("55","232323")
-//
-//        })
+
         //db
         val database = FirebaseDatabase.getInstance()
          myRef = database.getReference("nots")
@@ -92,6 +76,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        val testArray = arrayOf("555","aaaa","3232")
+        val testa = ArrayAdapter(this,android.R.layout.simple_list_item_1,testArray)
+        list.adapter=testa
         // get data from dp
         myRef?.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -107,11 +94,24 @@ class MainActivity : AppCompatActivity() {
                     mTodo?.add(0,todo!!)
                     //wtf("++","${m.getValue(Todo::class.java)}")
                 }
-                list.adapter=myAddapter(applicationContext, mTodo!!)
+                var a = myAddapter(applicationContext, mTodo!!)
+                list.adapter=a
+
             }
         })
+//        list.onItemClickListener =AdapterView.OnItemClickListener { parent, view, position, id ->
+//            Toast.makeText(applicationContext,"first",Toast.LENGTH_SHORT).show()
+//            wtf("##","wark")
+//        }
+//        var a = myAddapter(applicationContext, mTodo!!)
+//        list.adapter=a
+        list.setOnItemClickListener { adapterView, view, position, id ->
+             Toast.makeText(applicationContext,"first",Toast.LENGTH_SHORT).show()
+
+        }
 
     }
+
     fun post2db(id:String,text:String,time:String,isDone:Boolean){
         var addedTodo = Todo(id!!,text,"$time",false)
         myRef!!.child(id!!).setValue(addedTodo)
