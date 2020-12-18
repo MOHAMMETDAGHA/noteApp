@@ -1,5 +1,6 @@
 package com.mohetabsem.noteapp
 
+import android.content.Intent
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 //arrayAdapter.add("${inputVal}")
                 //list.adapter=myAddapter(applicationContext, mTodo!!)
                 input.setText("")
-                post2db(id!!,inputVal,"$currentDateTime",false)
+                post2db(id!!,inputVal,"$currentDateTime","**",false)
 //                myRef.child("$currentDateTime").child("txt").setValue("${inputVal}")
 //                myRef.child("$currentDateTime").child("isDone").setValue(false)
                 wtf("@@","$currentDateTime")
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity() {
         val testa = ArrayAdapter(this,android.R.layout.simple_list_item_1,testArray)
         list.adapter=testa
         // get data from dp
+
         myRef?.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(applicationContext, "no zeft", Toast.LENGTH_SHORT).show()
@@ -107,13 +109,19 @@ class MainActivity : AppCompatActivity() {
 //        list.adapter=a
         list.setOnItemClickListener { adapterView, view, position, id ->
              Toast.makeText(applicationContext,"first",Toast.LENGTH_SHORT).show()
+            var thisTodo = mTodo?.get(position)
+            var id= thisTodo!!.id
+            var deatilIntent=Intent(this,deatils::class.java)
 
+            wtf("main id","${id.toString()}")
+            deatilIntent.putExtra("txtId",id)
+            startActivity(deatilIntent)
         }
 
     }
 
-    fun post2db(id:String,text:String,time:String,isDone:Boolean){
-        var addedTodo = Todo(id!!,text,"$time",false)
+    fun post2db(id:String,text:String,time:String,deatails:String,isDone:Boolean){
+        var addedTodo = Todo(id!!,text,"$time",deatails,false)
         myRef!!.child(id!!).setValue(addedTodo)
     }
 }
